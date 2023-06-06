@@ -1,12 +1,15 @@
 package com.example.pidevback.entities;
 
-
 import com.example.pidevback.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,16 +23,21 @@ public class Users implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String fullName;
 
+    @JsonIgnore
     private String email;
 
+    @JsonIgnore
     private String password;
 
+    @JsonIgnore
     private Boolean enabled;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "owner",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Estate> estates;
 }
