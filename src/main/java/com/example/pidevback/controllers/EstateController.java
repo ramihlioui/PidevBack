@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,8 +60,8 @@ public class EstateController {
         }
     }
 
-    @PutMapping("/")
-    public ResponseEntity<Estate> updateEstate(@RequestBody EstateDto estateDto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Estate> updateEstate(@RequestBody EstateDto estateDto, @PathVariable Long id) {
         try {
             Users owner = userRepository.findById(estateDto.getOwnerId()).orElse(null);
             if (owner != null)
@@ -70,7 +71,8 @@ public class EstateController {
                     || estateDto.getPrice() == null)
                 throw new Exception("Owner, Name, Price and area are required.");
             Estate estateFromDto = EstateMapper.Instance.estateDtoToEstate(estateDto);
-            Estate updated = estateService.saveEstate(estateFromDto);
+            estateFromDto.setId(id);
+            Estate updated = estateService.updateEstate(estateFromDto);
             return ResponseEntity.status(HttpStatus.OK).body(updated);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), null);

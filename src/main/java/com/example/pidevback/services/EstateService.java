@@ -25,6 +25,18 @@ public class EstateService {
     public Estate saveEstate(Estate estate) throws Exception {
         return estateRepository.save(estate);
     }
+    
+    public Estate updateEstate(Estate estate) throws Exception {
+        Estate es = estateRepository.findById(estate.getId()).orElse(null);
+        if(es == null) throw new Exception("Provided estate ID doesn't exist");
+        if(estate.getArea() != null) es.setArea(estate.getArea());
+        if(estate.getName() != null) es.setName(estate.getName());
+        if(estate.getPrice() != null) es.setPrice(estate.getPrice());
+        es.setDescription(estate.getDescription());
+        es.setDetails(estate.getDetails());
+        es.setLocation(estate.getLocation());
+        return estateRepository.save(es);
+    }
 
     public List<Estate> getEstates(Estate es) {
         EstateBuilder estate = Estate.builder();

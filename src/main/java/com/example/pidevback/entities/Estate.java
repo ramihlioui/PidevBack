@@ -28,10 +28,10 @@ public class Estate implements Serializable {
 
     private String description;
 
-    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Estate_Details details;
 
-    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Location location;
 
     @ManyToOne(fetch = FetchType.EAGER)
