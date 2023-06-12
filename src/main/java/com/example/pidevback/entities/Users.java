@@ -1,11 +1,10 @@
 package com.example.pidevback.entities;
-
+import java.util.List;
 
 import com.example.pidevback.enums.Role;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -31,5 +30,7 @@ public class Users implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Posts> posts;
 
 }
