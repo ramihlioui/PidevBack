@@ -1,7 +1,11 @@
 package com.example.pidevback.security.config;
 
 import com.example.pidevback.security.JwtService;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,24 +22,27 @@ import java.io.IOException;
 
 
 @Component
-@RequiredArgsConstructor
+@Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-
-    private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    @Autowired
+    private  JwtService jwtService;
+    @Autowired
+    private  UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String email;
 
-        if(authHeader==null || !authHeader.startsWith("Bearer")){
-            filterChain.doFilter(request,response);
-            return;
+        if(request.getServletPath().contains("/auth")){
+            log.info("validate filter");
+                filterChain.doFilter(request,response);
+                return;
         }
+        log.error(" auth header" + authHeader);
         jwt = authHeader.substring(7);
         email = jwtService.extractUsername(jwt);
         if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){

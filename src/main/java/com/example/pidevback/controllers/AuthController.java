@@ -19,17 +19,21 @@ import java.security.Principal;
 @Slf4j
 public class AuthController {
 
-
+   @Autowired
     private UserService userService;
 
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody UserDto userDto) throws Exception {
-        return ResponseEntity.ok(userService.signIn(userDto));
+    @ResponseStatus(HttpStatus.OK)
+    public void register(@RequestBody UserDto userDto) throws Exception {
+        log.info("arararara");
+        userService.signIn(userDto);
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
+        log.info("arararara");
+
         return ResponseEntity.ok(userService.logIn(request));
     }
 

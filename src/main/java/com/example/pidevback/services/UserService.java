@@ -26,13 +26,17 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
     private final PasswordEncoder passwordEncoder;
+    @Autowired
     private final JwtService jwtService;
+    @Autowired
     private final AuthenticationManager authenticationManager;
 
 
 
-    public AuthenticationResponse signIn(UserDto userDto) throws Exception {
+    public void signIn(UserDto userDto) throws Exception {
+
 
         if(userRepository.findUserByEmail(userDto.getEmail()).isPresent())
             throw new Exception("User exists !");
@@ -41,11 +45,8 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        String token= jwtService.generateToken(user);
 
-        return  AuthenticationResponse.builder()
-                .token(token)
-                .build();
+
     }
 
     public AuthenticationResponse logIn(AuthenticationRequest request) {
