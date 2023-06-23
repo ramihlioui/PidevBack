@@ -21,6 +21,7 @@ import org.webjars.NotFoundException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -82,12 +83,6 @@ public class UserService implements UserDetailsService {
 
 
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findUserByEmail(email).orElseThrow(()-> new UsernameNotFoundException(String.format("User email %s not found",email)));
-    }
-
-
     public void confirmUser(String token) {
 
         if(jwtService.isTokenExpired(token))
@@ -102,4 +97,17 @@ public class UserService implements UserDetailsService {
         user.setIsEnabled(true);
         userRepository.save(user);
     }
+
+    public List<Users> findAllUsers() {
+        return userRepository.findAll();
+
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findUserByEmail(email).orElseThrow(()-> new UsernameNotFoundException(String.format("User email %s not found",email)));
+    }
+
+
+
 }
