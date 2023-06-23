@@ -26,20 +26,19 @@ import java.util.UUID;
 
 
 @Service
-@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     @Autowired
-    private final JwtService jwtService;
+    private JwtService jwtService;
     @Autowired
-    private final AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    private final EmailService emailService;
+    private  EmailService emailService;
 
 
     @Transactional
