@@ -17,7 +17,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Service
@@ -33,10 +37,12 @@ public class UserService implements UserDetailsService {
     @Autowired
     private final AuthenticationManager authenticationManager;
 
+    @Autowired
+    private final EmailService emailService;
 
 
+    @Transactional
     public void signIn(UserDto userDto) throws Exception {
-
 
         if(userRepository.findUserByEmail(userDto.getEmail()).isPresent())
             throw new Exception("User exists !");
@@ -45,6 +51,16 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
+        String token = jwtService.generateTokenUsingId(String.valueOf(user.getId()));
+
+        String link = "http://localhost:8080/auth/confirm?token=" + token;
+
+        String body = emailService.buildEmail(user.getFullName(), link);
+        emailService.sendSimpleEmail(
+                user.getEmail(),
+                "Please confirm your account",
+                body
+        );
 
 
     }
@@ -65,10 +81,25 @@ public class UserService implements UserDetailsService {
     }
 
 
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(email).orElseThrow(()-> new UsernameNotFoundException(String.format("User email %s not found",email)));
     }
 
 
+    public void confirmUser(String token) {
+
+        if(jwtService.isTokenExpired(token))
+            throw new IllegalStateException("token expired");
+
+        String id = jwtService.extractUsername(token);
+        Users user= userRepository.findById(Long.valueOf(id)).orElseThrow(()-> new IllegalStateException("Token invalid"));
+
+        if(user.isEnabled())
+            throw new IllegalStateException("email already confirmed");
+
+        user.setIsEnabled(true);
+        userRepository.save(user);
+    }
 }

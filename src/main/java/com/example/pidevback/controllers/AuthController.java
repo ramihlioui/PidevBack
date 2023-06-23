@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.security.Principal;
 
 @RestController
@@ -32,9 +33,15 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
-        log.info("arararara");
 
-        return ResponseEntity.ok(userService.logIn(request));
+          return ResponseEntity.ok(userService.logIn(request));
+    }
+
+    @PostMapping("/confirm")
+    @ResponseStatus(HttpStatus.OK)
+    public void confirmUser(@RequestParam(value = "token") String token){
+       userService.confirmUser(token);
+
     }
 
 

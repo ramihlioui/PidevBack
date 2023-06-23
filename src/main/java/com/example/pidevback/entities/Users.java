@@ -32,10 +32,11 @@ public class Users implements  UserDetails, Serializable {
 
     private String password;
 
-    private Boolean isEnabled = false;
 
-    private Boolean isLocked = false;
-    @ManyToMany(cascade = CascadeType.ALL)
+    private Boolean isEnabled =false ;
+
+    private Boolean isLocked = false ;
+    @ManyToMany(fetch=FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Role> roles = new ArrayList<>();
 
 
@@ -63,7 +64,7 @@ public class Users implements  UserDetails, Serializable {
 
     @Override
     public boolean isAccountNonLocked() {
-        return isLocked;
+        return true;
     }
 
     @Override
