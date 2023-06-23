@@ -2,14 +2,12 @@ package com.example.pidevback.entities;
 
 import com.example.pidevback.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -40,4 +38,8 @@ public class Users implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "owner",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Estate> estates;
+
+    @JsonIgnore
+    @OneToMany
+    private Set<Appointment> appointments;
 }
