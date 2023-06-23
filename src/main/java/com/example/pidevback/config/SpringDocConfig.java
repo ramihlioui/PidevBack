@@ -15,7 +15,7 @@ public class SpringDocConfig {
     }
     public Info infoAPI() {
         return new Info().title("SpringDoc-Demo")
-            .description("TP étude de cas");
+            .description("PIDEV");
 
     }
 

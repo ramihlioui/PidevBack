@@ -1,18 +1,17 @@
 package com.example.pidevback.dto;
 
 
-import com.example.pidevback.enums.Role;
+import com.example.pidevback.entities.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,9 +28,8 @@ public class UserDto {
     @Email
     private String email;
 
+    private String password;
 
-    private Boolean enabled;
-
-    @NotNull
-    private Role role;
+   @NotNull
+    private List<RoleDto> roles;
 }
