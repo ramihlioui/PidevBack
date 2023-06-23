@@ -36,7 +36,6 @@ public class UserService implements UserDetailsService {
     private JwtService jwtService;
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private  EmailService emailService;
 
