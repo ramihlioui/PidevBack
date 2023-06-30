@@ -48,7 +48,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        String token = jwtService.generateTokenUsingId(String.valueOf(user.getId()));
+        String token = jwtService.generateTokenUsingId(user);
 
         String link = "http://localhost:8080/auth/confirm?token=" + token;
 
@@ -72,7 +72,9 @@ public class UserService implements UserDetailsService {
         );
         Users user= userRepository.findUserByEmail(request.getEmail())
                 .orElseThrow(()-> new UsernameNotFoundException(String.format("User email %s not found",request.getEmail())));
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateTokenUsingId(user);
+
+        log.info(jwtService.extractId(token));
         return AuthenticationResponse.builder()
                 .token(token)
                 .build();

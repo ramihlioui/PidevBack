@@ -5,6 +5,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
+import com.example.pidevback.entities.Users;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,16 @@ public class JwtService {
         return extractClaim(token,Claims::getSubject);
     }
 
+    public String extractId(String token) {
+        return extractClaim(token,Claims::getSubject);
+    }
+
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token,Claims::getExpiration);
+    }
+
+
     public <T> T extractClaim(String token, Function<Claims,T> claimsResolver){
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -42,11 +53,10 @@ public class JwtService {
 
 
 
-
-    public String generateTokenUsingId(String userId){
+    public String generateTokenUsingId(Users user){
         return Jwts.builder()
                 .setClaims(null)
-                .setSubject(String.valueOf(userId))
+                .setSubject(String.valueOf(user.getId()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -62,10 +72,6 @@ public class JwtService {
 
     public boolean isTokenExpired(String token){
         return extractExpiration(token).before(new Date()) ;
-    }
-
-    private Date extractExpiration(String token) {
-        return extractClaim(token,Claims::getExpiration);
     }
 
 
