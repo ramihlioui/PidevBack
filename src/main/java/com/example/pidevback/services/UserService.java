@@ -3,7 +3,14 @@ package com.example.pidevback.services;
 import java.util.List;
 
 import javax.transaction.Transactional;
-
+import com.example.pidevback.Mapper.UserMapper;
+import com.example.pidevback.dto.AuthenticationRequest;
+import com.example.pidevback.dto.AuthenticationResponse;
+import com.example.pidevback.dto.UserDto;
+import com.example.pidevback.entities.Users;
+import com.example.pidevback.repositories.UserRepository;
+import com.example.pidevback.security.JwtService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,17 +19,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.example.pidevback.Mapper.UserMapper;
-import com.example.pidevback.dto.AuthenticationRequest;
-import com.example.pidevback.dto.AuthenticationResponse;
-import com.example.pidevback.dto.UserDto;
-import com.example.pidevback.entities.Users;
-import com.example.pidevback.repositories.UserRepository;
-import com.example.pidevback.security.JwtService;
+import org.webjars.NotFoundException;
 
 
 @Service
+@Slf4j
 public class UserService implements UserDetailsService {
 
     @Autowired
@@ -62,6 +63,7 @@ public class UserService implements UserDetailsService {
     }
 
     public AuthenticationResponse logIn(AuthenticationRequest request) {
+        log.info("logging");
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -93,9 +95,12 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public List<Users> findAllUsers() {
-        return userRepository.findAll();
+    public Users findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(()-> new NotFoundException("User not found"));
+    }
 
+    public List<Users> findUsers() {
+        return userRepository.findAll();
     }
 
     @Override
@@ -103,6 +108,23 @@ public class UserService implements UserDetailsService {
         return userRepository.findUserByEmail(email).orElseThrow(()-> new UsernameNotFoundException(String.format("User email %s not found",email)));
     }
 
+
+    public void updateUser(UserDto userDto) {
+
+        userRepository.findUserByEmail(userDto.getEmail()).orElseThrow(()-> new NotFoundException("User not found"));
+
+        Users user = UserMapper.Instance.userDtoToUser(userDto);
+
+        userRepository.save(user);
+    }
+
+    public void lockUser(String username) {
+        Users u = userRepository.findUserByEmail(username).orElseThrow(()-> new NotFoundException("User not found"));
+        u.setLoginAttempts(0);
+        u.setIsLocked(true);
+        userRepository.save(u);
+
+    }
 
 
 }

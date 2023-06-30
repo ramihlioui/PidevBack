@@ -1,5 +1,6 @@
 package com.example.pidevback.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -28,6 +29,7 @@ public class Role {
 
     private String role;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles",cascade = CascadeType.ALL)
     private List<Users> users;
 

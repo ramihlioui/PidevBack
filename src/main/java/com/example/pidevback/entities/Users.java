@@ -47,8 +47,7 @@ public class Users implements UserDetails {
     @JsonIgnore
     private String password;
 
-    @JsonIgnore
-    private Boolean enabled;
+    private int loginAttempts = 0;
 
     private Boolean isEnabled = false;
 
