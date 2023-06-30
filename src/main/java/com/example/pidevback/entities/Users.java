@@ -1,17 +1,30 @@
 package com.example.pidevback.entities;
 
-
-import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -19,7 +32,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Users implements  UserDetails, Serializable {
+public class Users implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,17 +41,24 @@ public class Users implements  UserDetails, Serializable {
 
     private String fullName;
 
+    @JsonIgnore
     private String email;
 
+    @JsonIgnore
     private String password;
 
+    @JsonIgnore
+    private Boolean enabled;
 
-    private Boolean isEnabled =false ;
+    private Boolean isEnabled = false;
 
     private Boolean isLocked = false ;
     @ManyToMany(fetch=FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Role> roles = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Estate> estates;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,34 +1,37 @@
 package com.example.pidevback.entities;
 
-import java.util.List;
+import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Role {
+@ToString
+@Builder
+public class Location implements Serializable {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
-    private String role;
+    private String address;
 
-    @ManyToMany(mappedBy = "roles",cascade = CascadeType.ALL)
-    private List<Users> users;
+    private Long latitude;
+
+    private Long longitude;
 
 }
