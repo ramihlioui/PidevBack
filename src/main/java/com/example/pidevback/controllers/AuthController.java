@@ -27,14 +27,13 @@ public class AuthController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.OK)
     public void register(@RequestBody UserDto userDto) throws Exception {
-        log.info("arararara");
         userService.signIn(userDto);
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
-
-          return ResponseEntity.ok(userService.logIn(request));
+        log.info("logginn");
+        return ResponseEntity.ok(userService.logIn(request));
     }
 
     @PostMapping("/confirm")

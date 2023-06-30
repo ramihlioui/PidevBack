@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Users implements  UserDetails, Serializable {
+public class Users implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +32,7 @@ public class Users implements  UserDetails, Serializable {
 
     private String password;
 
+    private int loginAttempts = 0;
 
     private Boolean isEnabled =false ;
 
