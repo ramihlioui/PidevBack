@@ -47,10 +47,10 @@ public class JwtService {
                 .compact();
     }
 
-    public String generateTokenUsingId(String userId){
+    public String generateTokenUsingId(Users user){
         return Jwts.builder()
                 .setClaims(null)
-                .setSubject(String.valueOf(userId))
+                .setSubject(String.valueOf(user.getId()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

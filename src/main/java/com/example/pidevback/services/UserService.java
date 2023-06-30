@@ -54,7 +54,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        String token = jwtService.generateTokenUsingId(String.valueOf(user.getId()));
+        String token = jwtService.generateTokenUsingId(user);
 
         String link = "http://localhost:8080/auth/confirm?token=" + token;
 
