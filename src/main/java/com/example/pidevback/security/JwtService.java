@@ -24,6 +24,11 @@ public class JwtService {
         return extractClaim(token,Claims::getSubject);
     }
 
+    public String extractId(String token) {
+        return extractClaim(token,Claims::getSubject);
+    }
+
+
     private Date extractExpiration(String token) {
         return extractClaim(token,Claims::getExpiration);
     }
