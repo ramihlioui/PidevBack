@@ -3,16 +3,12 @@ package com.example.pidevback.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.pidevback.dto.HeatmapDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.pidevback.Mapper.EstateMapper;
@@ -78,6 +74,17 @@ public class EstateController {
         try {
             List<Estate> estates = estateService.getEstates(es);
             return ResponseEntity.status(HttpStatus.OK).body(estates);
+        } catch (Exception e) {
+            //return ResponseEntity.status(200).body(new ArrayList<Estate>());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+        }
+    }
+
+    @GetMapping("/heatmap")
+    public ResponseEntity<List<HeatmapDto>> getHeatmap(){
+        try {
+            List<HeatmapDto> heatmap = estateService.getHeatmap();
+            return ResponseEntity.status(HttpStatus.OK).body(heatmap);
         } catch (Exception e) {
             //return ResponseEntity.status(200).body(new ArrayList<Estate>());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), null);

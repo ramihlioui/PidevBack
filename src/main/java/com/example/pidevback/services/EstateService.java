@@ -2,6 +2,7 @@ package com.example.pidevback.services;
 
 import java.util.List;
 
+import com.example.pidevback.dto.HeatmapDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,10 @@ public class EstateService {
         }
 
         return es != null ? estateRepository.findAll( Example.of(estate.build())) : estateRepository.findAll();
+    }
+
+    public List<HeatmapDto> getHeatmap(){
+        return estateRepository.findHeatmapData();
     }
 
 }
