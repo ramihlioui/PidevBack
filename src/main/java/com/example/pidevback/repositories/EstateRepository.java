@@ -2,13 +2,16 @@ package com.example.pidevback.repositories;
 
 import com.example.pidevback.dto.HeatmapDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.example.pidevback.entities.Estate;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 @Repository
 public interface EstateRepository extends JpaRepository<Estate, Long> {
     String _query = "SELECT COUNT(*) AS count, AVG(c.lat) AS lat, AVG(c.lng) AS lng, c.cluster FROM ( "
@@ -20,6 +23,7 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
             + "FROM location GROUP BY id"
             + " ) c GROUP BY c.cluster";
 
+    @Modifying
     @Query(value = _query, nativeQuery = true)
-    List<HeatmapDto> findHeatmapData();
+    List<Object[]> findHeatmapData();
 }

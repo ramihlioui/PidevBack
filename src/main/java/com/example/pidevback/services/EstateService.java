@@ -56,7 +56,7 @@ public class EstateService {
         return es != null ? estateRepository.findAll( Example.of(estate.build())) : estateRepository.findAll();
     }
 
-    public List<HeatmapDto> getHeatmap(){
+    public List<Object[]> getHeatmap(){
         return estateRepository.findHeatmapData();
     }
 

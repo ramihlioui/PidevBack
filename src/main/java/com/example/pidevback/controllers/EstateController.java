@@ -1,5 +1,6 @@
 package com.example.pidevback.controllers;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,10 +82,19 @@ public class EstateController {
     }
 
     @GetMapping("/heatmap")
-    public ResponseEntity<List<HeatmapDto>> getHeatmap(){
+    public ResponseEntity<List<HeatmapDto>> getHeatmap() {
         try {
-            List<HeatmapDto> heatmap = estateService.getHeatmap();
-            return ResponseEntity.status(HttpStatus.OK).body(heatmap);
+            List<Object[]> heatmap = estateService.getHeatmap();
+            List<HeatmapDto> data = new ArrayList();
+            for (Object[] obj : heatmap) {
+                HeatmapDto h = new HeatmapDto();
+                h.setCount(((BigInteger) obj[0]).intValue());
+                h.setLng(((Double) obj[1]).intValue());
+                h.setLat(((Double) obj[2]).intValue());
+                h.setCluster((int) obj[3]);
+                data.add(h);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(data);
         } catch (Exception e) {
             //return ResponseEntity.status(200).body(new ArrayList<Estate>());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), null);
