@@ -1,16 +1,11 @@
 package com.example.pidevback.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,4 +43,7 @@ public class Estate implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Users owner;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "estate", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Reclamation> reclamations;
 }
