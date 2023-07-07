@@ -1,5 +1,8 @@
 package com.example.pidevback.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import com.example.pidevback.entities.Estate_Details;
 import com.example.pidevback.entities.Location;
 import com.example.pidevback.entities.Users;
@@ -8,10 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter

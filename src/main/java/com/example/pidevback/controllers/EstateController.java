@@ -1,35 +1,29 @@
 package com.example.pidevback.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.example.pidevback.Mapper.EstateMapper;
 import com.example.pidevback.dto.EstateDto;
 import com.example.pidevback.entities.Estate;
 import com.example.pidevback.entities.Users;
 import com.example.pidevback.repositories.UserRepository;
 import com.example.pidevback.services.EstateService;
-import com.example.pidevback.services.UserService;
-
-import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/estates")
-@Slf4j
 public class EstateController {
 
     @Autowired
@@ -85,6 +79,7 @@ public class EstateController {
             List<Estate> estates = estateService.getEstates(es);
             return ResponseEntity.status(HttpStatus.OK).body(estates);
         } catch (Exception e) {
+            //return ResponseEntity.status(200).body(new ArrayList<Estate>());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), null);
         }
     }

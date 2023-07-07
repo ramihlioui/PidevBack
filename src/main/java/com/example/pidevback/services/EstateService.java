@@ -1,19 +1,16 @@
 package com.example.pidevback.services;
 
-import com.example.pidevback.Mapper.EstateMapper;
-import com.example.pidevback.dto.EstateDto;
-import com.example.pidevback.entities.Estate;
-import com.example.pidevback.entities.Estate_Details;
-import com.example.pidevback.entities.Estate.EstateBuilder;
-import com.example.pidevback.repositories.EstateRepository;
-
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+
+import com.example.pidevback.entities.Estate;
+import com.example.pidevback.entities.Estate.EstateBuilder;
+import com.example.pidevback.repositories.EstateRepository;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -40,7 +37,6 @@ public class EstateService {
 
     public List<Estate> getEstates(Estate es) {
         EstateBuilder estate = Estate.builder();
-        log.info(es.getDetails().getFloors().toString());
         if (es != null) {
             if (es.getDetails() != null)
                 estate.details(es.getDetails());
