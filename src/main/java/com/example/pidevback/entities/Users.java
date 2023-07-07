@@ -1,7 +1,6 @@
 package com.example.pidevback.entities;
 
 
-import com.example.pidevback.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,7 +41,9 @@ public class Users implements  UserDetails, Serializable {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Role> roles = new ArrayList<>();
 
-
+    @JsonIgnore
+    @OneToMany
+    private Set<Appointment> appointments;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
@@ -52,10 +53,6 @@ public class Users implements  UserDetails, Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "owner",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Estate> estates;
-
-    @JsonIgnore
-    @OneToMany
-    private Set<Appointment> appointments;
     @Override
     public String getUsername() {
         return email;

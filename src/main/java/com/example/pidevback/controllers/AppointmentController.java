@@ -1,7 +1,6 @@
 package com.example.pidevback.controllers;
 
 
-import com.example.pidevback.dto.AppointmentDto;
 import com.example.pidevback.entities.Appointment;
 import com.example.pidevback.services.AppointmentService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +22,10 @@ public class AppointmentController {
 
 
     @PostMapping("/")
-    public ResponseEntity<Appointment> post(@RequestBody AppointmentDto appointmentDto) {
-        log.info("log Start, AppointmentService_POST "+appointmentDto);
-        Appointment appointment = appointmentService.save(appointmentDto);
-        log.info("log Stop, AppointmentService_POST "+ appointment);
+    public ResponseEntity<Appointment> post(@RequestBody Appointment appointment) {
+        log.info("log Start, AppointmentService_POST "+appointment);
+        Appointment app = appointmentService.save(appointment);
+        log.info("log Stop, AppointmentService_POST "+ app);
         return ResponseEntity.status(HttpStatus.CREATED).body(appointment);
     }
 
