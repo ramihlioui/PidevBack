@@ -99,7 +99,7 @@ public class EstateController {
     }
 
     @GetMapping("/my-estates")
-    public ResponseEntity<List<Estate>> getMyEstates(@Nullable @RequestParam int page, Authentication auth) {
+    public ResponseEntity<List<Estate>> getMyEstates(@RequestParam int page, Authentication auth) {
         try {
             Users me = userRepository.findUserByEmail(auth.getName()).orElse(null);
             if(me == null) throw new Exception();
