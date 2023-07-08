@@ -13,10 +13,7 @@ import com.example.pidevback.entities.Estate;
 import com.example.pidevback.entities.Estate.EstateBuilder;
 import com.example.pidevback.repositories.EstateRepository;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class EstateService {
 
     @Autowired

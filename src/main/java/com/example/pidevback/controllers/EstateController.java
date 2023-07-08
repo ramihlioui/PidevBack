@@ -4,23 +4,31 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.pidevback.dto.EstatesOnMapSearch;
-import com.example.pidevback.dto.HeatmapDto;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.pidevback.Mapper.EstateMapper;
 import com.example.pidevback.dto.EstateDto;
+import com.example.pidevback.dto.EstatesOnMapSearch;
+import com.example.pidevback.dto.HeatmapDto;
 import com.example.pidevback.entities.Estate;
 import com.example.pidevback.entities.Users;
 import com.example.pidevback.repositories.UserRepository;
 import com.example.pidevback.services.EstateService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
@@ -67,9 +75,7 @@ public class EstateController {
             Users owner = userRepository.findUserByEmail(auth.getName()).orElse(null);
             log.info(auth.getName());
             log.info(owner.getId().toString());
-            if (owner != null)
-                estateDto.setOwner(owner);
-            else throw new Exception("Cannot find a user with such email address");
+            estateDto.setOwner(owner);
             //if any required data is null
             if (estateDto.getName() == null || estateDto.getArea() == null
                     || estateDto.getPrice() == null)
@@ -130,7 +136,7 @@ public class EstateController {
     public ResponseEntity<List<HeatmapDto>> getHeatmap() {
         try {
             List<Object[]> heatmap = estateService.getHeatmap();
-            List<HeatmapDto> data = new ArrayList();
+            List<HeatmapDto> data = new ArrayList<HeatmapDto>();
             for (Object[] obj : heatmap) {
                 HeatmapDto h = new HeatmapDto();
                 h.setCount(((BigInteger) obj[0]).intValue());
