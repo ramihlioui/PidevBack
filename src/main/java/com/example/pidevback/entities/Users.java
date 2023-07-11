@@ -3,6 +3,7 @@ package com.example.pidevback.entities;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -95,4 +96,16 @@ public class Users implements UserDetails {
     public boolean isEnabled() {
         return isEnabled;
     }
+
+
+
+    // ahmed posts //
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL)
+    Set<Post> posts;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    Set<PostLike> postLikes;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    Set<PostDislike> postDislikes;
 }
