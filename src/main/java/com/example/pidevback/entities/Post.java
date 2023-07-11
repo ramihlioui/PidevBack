@@ -25,7 +25,7 @@ public class Post implements Serializable {
 
     String body;
 
-
+    int nb_Signal;
     int nb_etoil;
     @ManyToOne
     Users users;
