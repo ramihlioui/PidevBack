@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -35,9 +36,11 @@ public class ForumService {
     UserRepository userRepository;
     //Add Post//
     public ResponseEntity<?> addPost(Post post, Long IdUser){
+
         Users u = userRepository.findById(IdUser).orElse(null);
         if(Filtrage_bad_word(post.getBody())==0 && Filtrage_bad_word(post.getPostTitle())==0){
             post.setUsers(u);
+            post.setCreatedAt(new Date());
             u.getPosts().add(post);
             postRepo.save(post);
             return  ResponseEntity.ok().body(post);
@@ -49,24 +52,15 @@ public class ForumService {
     //Update post//
     public ResponseEntity<?> editPost(Post post,Long idUser) {
         Post p = postRepo.findById(post.getPostId()).orElseThrow(EntityNotFoundException::new);
-        Users user = userRepository.findById(post.getUsers().getId()).orElseThrow(EntityNotFoundException::new);
+        Users user = userRepository.findById(p.getUsers().getId()).orElseThrow(EntityNotFoundException::new);
         if (user.getId() == idUser) {
-            Set<Post> postSet = user.getPosts();
-            for (Post p1 : postSet){
-                if(p1.getPostId()==p.getPostId()){
-                    p1.setPostTitle(p.getPostTitle());
-                    p1.setBody(p.getBody());
-                    user.setPosts(postSet);
-                    postRepo.save(p);
-                    return  ResponseEntity.ok().body(post);
-                }else {
+            p.setPostTitle(post.getPostTitle());
+            p.setBody(post.getBody());
+            postRepo.save(p);
+            return  ResponseEntity.ok().body(p);
+        }else {
                     return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Post Not Found");
                 }
-            }
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No previleges");
-        }
-        return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Error");
     }
     //Update post//
 
@@ -78,14 +72,13 @@ public class ForumService {
             Post post= postRepo.findById(idPost).orElseThrow(EntityNotFoundException::new);
             Users user=userRepository.findById(post.getUsers().getId()).orElseThrow(EntityNotFoundException::new);
             if(user.getId()==idUser){
-                Set<Post> p = user.getPosts();
-                p.remove(post);
-                user.setPosts(p);
-                userRepository.save(user);
+                user.getPosts().remove(post);
+//                userRepository.save(user);
                 postRepo.delete(post);
                 return  ResponseEntity.ok().body("Post Deleted");
             }else{
-                return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("you can't delete this post");     }
+                return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("you can't delete this post");
+            }
 
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post Not Found");
@@ -117,6 +110,7 @@ public class ForumService {
 
         return badWordRepo.save(b);
     }
+
     public int Filtrage_bad_word(String ch) {
         int x = 0;
         List<BadWord> l1 = (List<BadWord>) badWordRepo.findAll();

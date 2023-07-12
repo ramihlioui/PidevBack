@@ -72,7 +72,7 @@ public class UserService implements UserDetailsService {
         );
         Users user= userRepository.findUserByEmail(request.getEmail())
                 .orElseThrow(()-> new UsernameNotFoundException(String.format("User email %s not found",request.getEmail())));
-        String token = jwtService.generateTokenUsingId(user);
+        String token = jwtService.generateToken(user);
 
         log.info(jwtService.extractId(token));
         return AuthenticationResponse.builder()
