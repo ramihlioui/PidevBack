@@ -2,6 +2,7 @@ package com.example.pidevback.entities;
 
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -33,16 +34,11 @@ public class Reclamation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
     private String description;
-    private String reason;
     private State state;
     private String solution;
-
-
-
-
-    @ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Estate estate;
+    private Date creationDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Users claimer;

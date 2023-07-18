@@ -43,7 +43,4 @@ public class Estate implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Users owner;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "estate", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Reclamation> reclamations;
 }
