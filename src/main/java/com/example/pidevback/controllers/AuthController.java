@@ -42,8 +42,8 @@ public class AuthController {
 
     @PostMapping ("/forgot-password")
     @ResponseStatus(HttpStatus.OK)
-    public void forgotUserPassword(@RequestBody ForgotPassword email){
-        userService.forgotpassword(email);
+    public String forgotUserPassword(@RequestBody ForgotPassword email){
+        return  userService.forgotpassword(email);
     }
 
 

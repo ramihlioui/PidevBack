@@ -48,7 +48,7 @@ public class UserService implements UserDetailsService {
 
         String token = jwtService.generateToken(user);
 
-        String link = "http://localhost:4200/#/examples/lock?token=" + token;
+        String link = "http://localhost:4200/activated?token=" + token;
 
         String body = emailService.buildEmail(user.getFullName(), link);
         emailService.sendSimpleEmail(
@@ -61,6 +61,7 @@ public class UserService implements UserDetailsService {
     }
 
     public AuthenticationResponse logIn(AuthenticationRequest request) {
+        log.info("aaaaa");
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -68,6 +69,7 @@ public class UserService implements UserDetailsService {
                         request.getPassword()
                 )
         );
+        log.info("aaaaa");
         Users user= userRepository.findUserByEmail(request.getEmail())
                 .orElseThrow(()-> new NotFoundException(String.format("User email %s not found",request.getEmail())));
 
@@ -86,24 +88,25 @@ public class UserService implements UserDetailsService {
         if(jwtService.isTokenExpired(token))
             throw new IllegalStateException("token expired");
 
-        String id = jwtService.extractUsername(token);
-        Users user= userRepository.findById(Long.valueOf(id)).orElseThrow(()-> new IllegalStateException("Token invalid"));
+        String username = jwtService.extractUsername(token);
+        Users user= userRepository.findUserByEmail(username).orElseThrow(()-> new IllegalStateException("Token invalid"));
 
         if(user.isEnabled())
             throw new IllegalStateException("email already confirmed");
 
         user.setIsEnabled(true);
+        log.info( "user enabled : ",user.getIsEnabled() );
         userRepository.save(user);
     }
 
-    public void forgotpassword(ForgotPassword email){
+    public String forgotpassword(ForgotPassword email){
 
         log.info(email.getEmail());
         Users user= userRepository.findUserByEmail(email.getEmail()).orElseThrow(()-> new NotFoundException(String.format("User email %s not found",email.getEmail())));
 
         String token = jwtService.generateToken(user);
 
-        String link = "http://localhost:4200/#/examples/reset-password?token=" + token;
+        String link = "http://localhost:4200/reset-password?token=" + token;
         log.info(link);
         String body = emailService.buildEmail(user.getFullName(), link);
         emailService.sendSimpleEmail(
@@ -111,6 +114,8 @@ public class UserService implements UserDetailsService {
                 "Password Reset",
                 body
         );
+
+        return "email sent";
     }
 
     public void resetpassword(ResetPassword password, String token){
@@ -124,7 +129,6 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(password.getPassword()));
         log.info(user.getPassword());
         userRepository.save(user);
-
     }
 
     public Users findUserById(Long id) {
