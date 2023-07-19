@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.pidevback.dto.EstateSearchDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,8 @@ import com.example.pidevback.repositories.UserRepository;
 import com.example.pidevback.services.EstateService;
 
 import lombok.extern.slf4j.Slf4j;
+
+import javax.validation.constraints.Null;
 
 @RestController
 @Slf4j
@@ -73,8 +76,6 @@ public class EstateController {
     public ResponseEntity<Estate> updateEstate(@RequestBody EstateDto estateDto, @PathVariable Long id, Authentication auth) {
         try {
             Users owner = userRepository.findUserByEmail(auth.getName()).orElse(null);
-            log.info(auth.getName());
-            log.info(owner.getId().toString());
             estateDto.setOwner(owner);
             //if any required data is null
             if (estateDto.getName() == null || estateDto.getArea() == null
@@ -93,10 +94,23 @@ public class EstateController {
         }
     }
 
+    /*
     @PostMapping("/search")
     public ResponseEntity<List<Estate>> getEstates(@Nullable @RequestBody Estate es, @RequestParam int page) {
         try {
             List<Estate> estates = estateService.getEstates(es, page);
+            return ResponseEntity.status(HttpStatus.OK).body(estates);
+        } catch (Exception e) {
+            //return ResponseEntity.status(200).body(new ArrayList<Estate>());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+        }
+    }
+    */
+
+    @PostMapping("/search")
+    public ResponseEntity<List<Estate>> getEstates(@Nullable @RequestBody EstateSearchDto es, @RequestParam int page) {
+        try {
+            List<Estate> estates = estateService.searchEstates(es, page);
             return ResponseEntity.status(HttpStatus.OK).body(estates);
         } catch (Exception e) {
             //return ResponseEntity.status(200).body(new ArrayList<Estate>());

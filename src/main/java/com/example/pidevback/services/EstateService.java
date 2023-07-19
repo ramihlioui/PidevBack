@@ -1,7 +1,9 @@
 package com.example.pidevback.services;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.example.pidevback.dto.EstateSearchDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -42,6 +44,7 @@ public class EstateService {
         return estateRepository.save(es);
     }
 
+    /*
     public List<Estate> getEstates(Estate es, int page) {
         EstateBuilder estate = Estate.builder();
         if (es != null) {
@@ -67,6 +70,7 @@ public class EstateService {
 
         return result.getContent();
     }
+    */
 
     public List<Object[]> getHeatmap() {
         return estateRepository.findHeatmapData();
@@ -89,6 +93,20 @@ public class EstateService {
                         maxLong,
                         PageRequest.of(0,20,Sort.by("price").ascending())
                 );
+    }
+
+    public List<Estate> searchEstates(EstateSearchDto cr, int page){
+        return estateRepository.searchEstates(
+                cr.getMaxArea(),
+                cr.getMinArea(),
+                cr.getMaxPrice(),
+                cr.getMinPrice(),
+                cr.getMaxNbRoom(),
+                cr.getMinNbRoom(),
+                cr.getMaxFloor(),
+                cr.getMinFloor(),
+                PageRequest.of(page, 20, Sort.by("createdAt"))
+        );
     }
 
 }

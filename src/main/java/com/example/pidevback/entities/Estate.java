@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -50,16 +51,25 @@ public class Estate implements Serializable {
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDate createdAt;
-    
-    @JsonIgnore
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Estate_Details details;
 
-    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Location location;
 
-    @JsonIgnore
+    @JsonIgnoreProperties(value = {
+            "loginAttempts",
+            "isEnabled",
+            "isLocked",
+            "roles",
+            "enabled",
+            "username",
+            "accountNonExpired",
+            "credentialsNonExpired",
+            "accountNonLocked",
+            "authorities"
+    })
     @ManyToOne(fetch = FetchType.EAGER)
     private Users owner;
 
