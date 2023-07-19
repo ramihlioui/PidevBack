@@ -22,20 +22,14 @@ public class ReclamationController {
     @PostMapping("/addReclamation/{userid}")
     public ResponseEntity<Reclamation> addComplaint(@RequestBody Reclamation reclamation, Users user) {
         Long iduser = user.getId();
-        reclamationService.saveReclamation(reclamation, iduser);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @PutMapping("process/{complaintId}")
-    public ResponseEntity<Reclamation> processReclamation(@PathVariable Long complaintId) {
-        reclamationService.processReclamation(complaintId);
-        return ResponseEntity.ok().build();
+        Reclamation rec = reclamationService.saveReclamation(reclamation, iduser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(rec);
     }
 
     @PutMapping("close/{complaintId}")
     public ResponseEntity<Reclamation> closeReclamation(@RequestBody String solution, @PathVariable Long complaintId) {
-        reclamationService.closeReclamation(complaintId, solution);
-        return ResponseEntity.ok().build();
+        Reclamation rec = reclamationService.closeReclamation(complaintId, solution);
+        return ResponseEntity.ok(rec);
     }
 
     @DeleteMapping("delete/{complaintId}")

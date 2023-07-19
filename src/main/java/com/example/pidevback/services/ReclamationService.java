@@ -3,7 +3,6 @@ package com.example.pidevback.services;
 
 import com.example.pidevback.entities.Reclamation;
 import com.example.pidevback.entities.Users;
-import com.example.pidevback.entities.enums.State;
 import com.example.pidevback.repositories.ReclamationRepository;
 import com.example.pidevback.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -37,17 +36,17 @@ public class ReclamationService {
     }
 
     public List<Reclamation> getOpenReclamations() {
-        return reclamationRepository.findAll().stream().filter(reclamation -> !reclamation.getState().equals(State.CLOSED)).collect(Collectors.toList());
+        return reclamationRepository.findAll().stream().filter(reclamation -> !reclamation.isTreated()).collect(Collectors.toList());
     }
 
     public List<Reclamation> getClosedReclamations() {
-        return reclamationRepository.findAll().stream().filter(reclamation -> reclamation.getState().equals(State.CLOSED)).collect(Collectors.toList());
+        return reclamationRepository.findAll().stream().filter(Reclamation::isTreated).collect(Collectors.toList());
     }
 
     public Map<String, Long> getReclamationStats() {
         Map<String, Long> stats = new HashMap<>();
-        stats.put("Processing", reclamationRepository.findAll().stream().filter(rec -> rec.getState().equals(State.PROCESSING)).count());
-        stats.put("Created", reclamationRepository.findAll().stream().filter(rec -> rec.getState().equals(State.CREATED)).count());
+        stats.put("Open", reclamationRepository.findAll().stream().filter(rec -> !rec.isTreated()).count());
+        stats.put("Closed", reclamationRepository.findAll().stream().filter(Reclamation::isTreated).count());
         stats.put("CreatedToday", reclamationRepository.findAll().stream().filter(rec -> rec.getCreationDate().equals(new Date())).count());
         stats.put("Total", (long) reclamationRepository.findAll().size());
         return stats;
@@ -63,15 +62,9 @@ public class ReclamationService {
 
     }
 
-    public Reclamation processReclamation(Long id) {
-        Reclamation rec = reclamationRepository.findById(id).orElseThrow(RuntimeException::new);
-        rec.setState(State.PROCESSING);
-        return reclamationRepository.save(rec);
-    }
-
     public Reclamation closeReclamation(Long id, String solution) {
         Reclamation rec = reclamationRepository.findById(id).orElseThrow(RuntimeException::new);
-        rec.setState(State.CLOSED);
+        rec.setTreated(true);
         rec.setSolution(solution);
         return reclamationRepository.save(rec);
     }
