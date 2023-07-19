@@ -21,10 +21,11 @@ public class ReclamationService {
     @Autowired
     private final ReclamationRepository reclamationRepository;
     @Autowired
-    UserRepository userrepository;
+    private final UserRepository userrepository;
 
-    public ReclamationService(ReclamationRepository reclamationRepository) {
+    public ReclamationService(ReclamationRepository reclamationRepository, UserRepository userrepository) {
         this.reclamationRepository = reclamationRepository;
+        this.userrepository = userrepository;
     }
 
     public Reclamation getReclamation(Long id) {
