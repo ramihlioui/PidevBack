@@ -4,9 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 import com.example.pidevback.Mapper.UserMapper;
-import com.example.pidevback.dto.AuthenticationRequest;
-import com.example.pidevback.dto.AuthenticationResponse;
-import com.example.pidevback.dto.UserDto;
+import com.example.pidevback.dto.*;
 import com.example.pidevback.entities.Users;
 import com.example.pidevback.repositories.UserRepository;
 import com.example.pidevback.security.JwtService;
@@ -48,9 +46,9 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        String token = jwtService.generateTokenUsingId(user);
+        String token = jwtService.generateToken(user);
 
-        String link = "http://localhost:8080/auth/confirm?token=" + token;
+        String link = "http://localhost:4200/#/examples/lock?token=" + token;
 
         String body = emailService.buildEmail(user.getFullName(), link);
         emailService.sendSimpleEmail(
@@ -63,7 +61,7 @@ public class UserService implements UserDetailsService {
     }
 
     public AuthenticationResponse logIn(AuthenticationRequest request) {
-        log.info("logging");
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -71,13 +69,14 @@ public class UserService implements UserDetailsService {
                 )
         );
         Users user= userRepository.findUserByEmail(request.getEmail())
-                .orElseThrow(()-> new UsernameNotFoundException(String.format("User email %s not found",request.getEmail())));
-        String token = jwtService.generateTokenUsingId(user);
+                .orElseThrow(()-> new NotFoundException(String.format("User email %s not found",request.getEmail())));
 
+        AuthenticationResponse res = new AuthenticationResponse();
+        user.getAuthorities().stream().forEach(grantedAuthority -> res.getRoles().add(grantedAuthority.getAuthority().toString()));
+        String token = jwtService.generateToken(user);
         log.info(jwtService.extractId(token));
-        return AuthenticationResponse.builder()
-                .token(token)
-                .build();
+        res.setToken(token);
+        return res;
     }
 
 
@@ -97,7 +96,39 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public void forgotpassword(ForgotPassword email){
+
+        log.info(email.getEmail());
+        Users user= userRepository.findUserByEmail(email.getEmail()).orElseThrow(()-> new NotFoundException(String.format("User email %s not found",email.getEmail())));
+
+        String token = jwtService.generateToken(user);
+
+        String link = "http://localhost:4200/#/examples/reset-password?token=" + token;
+        log.info(link);
+        String body = emailService.buildEmail(user.getFullName(), link);
+        emailService.sendSimpleEmail(
+                user.getEmail(),
+                "Password Reset",
+                body
+        );
+    }
+
+    public void resetpassword(ResetPassword password, String token){
+        if(jwtService.isTokenExpired(token))
+            throw new IllegalStateException("Expired token");
+        String email = jwtService.extractUsername(token);
+        Users user= userRepository.findUserByEmail(email).orElseThrow(()-> new IllegalStateException("Token invalid"));
+        log.info(user.getPassword());
+        log.info(password.getPassword());
+
+        user.setPassword(passwordEncoder.encode(password.getPassword()));
+        log.info(user.getPassword());
+        userRepository.save(user);
+
+    }
+
     public Users findUserById(Long id) {
+        log.info("getting user "+id);
         return userRepository.findById(id).orElseThrow(()-> new NotFoundException("User not found"));
     }
 
@@ -119,6 +150,8 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(user);
     }
+
+
 
     public void lockUser(String username) {
         Users u = userRepository.findUserByEmail(username).orElseThrow(()-> new NotFoundException("User not found"));
