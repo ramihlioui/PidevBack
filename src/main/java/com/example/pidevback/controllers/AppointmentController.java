@@ -7,11 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/appointments")
 @Slf4j
 public class AppointmentController {
@@ -21,12 +22,12 @@ public class AppointmentController {
     private AppointmentService appointmentService;
 
 
-    @PostMapping("/")
+    @PostMapping("/add-appointment")
     public ResponseEntity<Appointment> post(@RequestBody Appointment appointment) {
         log.info("log Start, AppointmentService_POST "+appointment);
         Appointment app = appointmentService.save(appointment);
         log.info("log Stop, AppointmentService_POST "+ app);
-        return ResponseEntity.status(HttpStatus.CREATED).body(appointment);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("")

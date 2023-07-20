@@ -66,9 +66,6 @@ public class Users implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole()))
                 .collect(Collectors.toList());
     }
-    @JsonIgnore
-    @OneToMany(mappedBy = "owner",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Estate> estates;
     @Override
     public String getUsername() {
         return email;
