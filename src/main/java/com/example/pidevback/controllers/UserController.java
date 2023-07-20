@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("user")
-
 public class UserController {
 
     @Autowired
@@ -37,4 +36,6 @@ public class UserController {
     public void updateUser(@RequestBody(required = true) UserDto userDto){
         userService.updateUser(userDto);
     }
+
+
 }
