@@ -10,5 +10,5 @@ public class TestUtils {
     public static final long RECLAMATION_ID = 10L;
     public static final long USER_ID = 10L;
     public static final Users USER = new Users(USER_ID,"name","mail","pass",1,true,false,null,null,new ArrayList<>());
-    public static final Reclamation RECLAMATION= new Reclamation(RECLAMATION_ID,"test complaint","described",false,"fixed it",new Date(),USER);
+    public static  Reclamation RECLAMATION= new Reclamation(RECLAMATION_ID,"test complaint","described",false,"",new Date(),USER);
 }

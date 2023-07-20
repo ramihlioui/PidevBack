@@ -7,6 +7,7 @@ import com.example.pidevback.repositories.ReclamationRepository;
 import com.example.pidevback.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -53,12 +54,16 @@ public class ReclamationService {
         return stats;
     }
 
-    public Reclamation saveReclamation(Reclamation reclamation, Long userId) {
+    public Reclamation saveReclamation(Reclamation reclamation) {
+        Long userId=extractUserIDFromToken();
+        if (userId == null)
+            throw new RuntimeException("No UserID");
         Users user = userrepository.findById(userId).orElse(null);
         if (user == null)
             throw new RuntimeException("No User");
         user.getReclamations().add(reclamation);
         reclamation.setClaimer(user);
+        reclamation.setCreationDate(new Date());
         return reclamationRepository.save(reclamation);
 
     }
@@ -67,11 +72,24 @@ public class ReclamationService {
         Reclamation rec = reclamationRepository.findById(id).orElseThrow(RuntimeException::new);
         rec.setTreated(true);
         rec.setSolution(solution);
-        return reclamationRepository.save(rec);
+        reclamationRepository.save(rec);
+        return rec;
     }
 
     public void deleteReclamation(Long id) {
         reclamationRepository.deleteById(id);
     }
 
+    private Long extractUserIDFromToken() {
+//        log.info("extractUserIDFromToken");
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof Users) {
+            Long userID = ((Users)principal).getId();
+            return userID;
+        }
+        return null;
+
+
+    }
 }

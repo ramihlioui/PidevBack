@@ -22,7 +22,7 @@ public class ReclamationController {
     @PostMapping("/addReclamation/{userid}")
     public ResponseEntity<Reclamation> addComplaint(@RequestBody Reclamation reclamation, Users user) {
         Long iduser = user.getId();
-        Reclamation rec = reclamationService.saveReclamation(reclamation, iduser);
+        Reclamation rec = reclamationService.saveReclamation(reclamation);
         return ResponseEntity.status(HttpStatus.CREATED).body(rec);
     }
 
