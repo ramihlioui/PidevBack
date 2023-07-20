@@ -1,19 +1,12 @@
 package com.example.pidevback.controllers;
 
 
+import com.example.pidevback.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.pidevback.dto.AuthenticationRequest;
-import com.example.pidevback.dto.AuthenticationResponse;
-import com.example.pidevback.dto.UserDto;
 import com.example.pidevback.services.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +27,10 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
+    @ResponseStatus(HttpStatus.OK)
+    public AuthenticationResponse authenticate(@RequestBody AuthenticationRequest request){
         log.info("logginn");
-        return ResponseEntity.ok(userService.logIn(request));
+        return userService.logIn(request);
     }
 
     @PostMapping("/confirm")
@@ -46,5 +40,17 @@ public class AuthController {
 
     }
 
+    @PostMapping ("/forgot-password")
+    @ResponseStatus(HttpStatus.OK)
+    public String forgotUserPassword(@RequestBody ForgotPassword email){
+        return  userService.forgotpassword(email);
+    }
+
+
+    @PutMapping("/reset-password")
+    @ResponseStatus(HttpStatus.OK)
+    public void resetUserPassword(@RequestBody(required = true) ResetPassword password, @RequestParam String token){
+        userService.resetpassword(password,token);
+    }
 
 }

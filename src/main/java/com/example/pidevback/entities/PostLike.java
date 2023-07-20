@@ -22,7 +22,7 @@ public class PostLike implements Serializable {
 
     Boolean isLiked ;
 
-
+    
     @ManyToOne
     Users user; // The user who clicked Like
 

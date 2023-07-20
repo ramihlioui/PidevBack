@@ -18,13 +18,14 @@ public class PostComment implements Serializable {
 
     Date commentedAt;
 
-
+//@JsonIgnore
     @ManyToOne
     Users user; // The user who wants to comment
 
     @JsonIgnore
     @ManyToOne
     Post post; // The post to comment
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postReply")
     Set<PostComment> postComments;   //Reflexive association : A comment can have multiple replies
 

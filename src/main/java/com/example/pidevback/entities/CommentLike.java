@@ -20,7 +20,7 @@ public class CommentLike implements Serializable {
     Users user;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     PostComment postComment;
 
 

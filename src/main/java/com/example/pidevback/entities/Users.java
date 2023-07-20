@@ -103,9 +103,10 @@ public class Users implements UserDetails {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
     Set<Post> posts;
-
+@JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     Set<PostLike> postLikes;
+@JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     Set<PostDislike> postDislikes;
 }

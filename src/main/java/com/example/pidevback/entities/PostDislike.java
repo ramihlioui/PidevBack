@@ -1,5 +1,6 @@
 package com.example.pidevback.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,7 +16,7 @@ public class PostDislike implements Serializable {
     Date dislikedAt;
     @ManyToOne
     Users user; // The user who clicked Like
-
+@JsonIgnore
     @ManyToOne
     Post post; // The post to like
 }

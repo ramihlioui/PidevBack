@@ -27,7 +27,7 @@ public class Post implements Serializable {
 
     int nb_Signal;
     int nb_etoil;
-
+@JsonIgnore
     @ManyToOne
     Users users;
 
