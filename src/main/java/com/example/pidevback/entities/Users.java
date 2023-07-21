@@ -52,6 +52,7 @@ public class Users implements UserDetails {
     private Boolean isEnabled = false;
 
     private Boolean isLocked = false ;
+    @JsonIgnore
     @ManyToMany(fetch=FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Role> roles = new ArrayList<>();
 
