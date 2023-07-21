@@ -53,12 +53,17 @@ public class Users implements UserDetails {
     private Boolean isEnabled = false;
 
     private Boolean isLocked = false ;
+    @JsonIgnore
     @ManyToMany(fetch=FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Role> roles = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Estate> estates;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "claimer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Reclamation> reclamations;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

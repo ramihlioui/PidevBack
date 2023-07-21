@@ -78,6 +78,7 @@ public class UserService implements UserDetailsService {
         AuthenticationResponse res = new AuthenticationResponse();
         user.getAuthorities().stream().forEach(grantedAuthority -> res.getRoles().add(grantedAuthority.getAuthority().toString()));
         String token = jwtService.generateToken(user);
+        log.info(token);
         log.info(jwtService.extractId(token));
         res.setToken(token);
         return res;
