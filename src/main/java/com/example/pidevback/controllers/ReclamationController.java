@@ -19,9 +19,8 @@ public class ReclamationController {
     @Autowired
     ReclamationService reclamationService;
 
-    @PostMapping("/addReclamation/{userid}")
-    public ResponseEntity<Reclamation> addComplaint(@RequestBody Reclamation reclamation, Users user) {
-        Long iduser = user.getId();
+    @PostMapping("/addReclamation")
+    public ResponseEntity<Reclamation> addComplaint(@RequestBody Reclamation reclamation) {
         Reclamation rec = reclamationService.saveReclamation(reclamation);
         return ResponseEntity.status(HttpStatus.CREATED).body(rec);
     }
