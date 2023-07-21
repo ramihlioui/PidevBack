@@ -71,7 +71,9 @@ public class UserService implements UserDetailsService {
         );
         log.info("aaaaa");
         Users user= userRepository.findUserByEmail(request.getEmail())
+
                 .orElseThrow(()-> new NotFoundException(String.format("User email %s not found",request.getEmail())));
+
 
         AuthenticationResponse res = new AuthenticationResponse();
         user.getAuthorities().stream().forEach(grantedAuthority -> res.getRoles().add(grantedAuthority.getAuthority().toString()));
