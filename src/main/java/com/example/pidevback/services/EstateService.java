@@ -1,18 +1,14 @@
 package com.example.pidevback.services;
 
 import java.util.List;
-import java.util.Optional;
 
-import com.example.pidevback.dto.EstateSearchDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.pidevback.dto.EstateSearchDto;
 import com.example.pidevback.entities.Estate;
-import com.example.pidevback.entities.Estate.EstateBuilder;
 import com.example.pidevback.repositories.EstateRepository;
 
 @Service
