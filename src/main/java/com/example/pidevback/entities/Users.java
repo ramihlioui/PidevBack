@@ -59,6 +59,10 @@ public class Users implements UserDetails {
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Estate> estates;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "claimer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Reclamation> reclamations;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
