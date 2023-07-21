@@ -1,6 +1,7 @@
 package com.example.pidevback.controllers;
 
 
+import com.example.pidevback.dto.Solution;
 import com.example.pidevback.entities.Reclamation;
 import com.example.pidevback.entities.Users;
 import com.example.pidevback.services.ReclamationService;
@@ -26,7 +27,7 @@ public class ReclamationController {
     }
 
     @PutMapping("close/{complaintId}")
-    public ResponseEntity<Reclamation> closeReclamation(@RequestBody String solution, @PathVariable Long complaintId) {
+    public ResponseEntity<Reclamation> closeReclamation(@RequestBody Solution solution, @PathVariable Long complaintId) {
         Reclamation rec = reclamationService.closeReclamation(complaintId, solution);
         return ResponseEntity.ok(rec);
     }

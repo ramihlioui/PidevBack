@@ -1,6 +1,7 @@
 package com.example.pidevback.services;
 
 import com.example.pidevback.TestUtils;
+import com.example.pidevback.dto.Solution;
 import com.example.pidevback.entities.Reclamation;
 import com.example.pidevback.repositories.ReclamationRepository;
 import com.example.pidevback.repositories.UserRepository;
@@ -39,7 +40,7 @@ public class ReclamationServiceTest {
     @Test
     void Test_closeReclamation_whenValid() {
         when(reclamationRepositoryMock.findById(any())).thenReturn(Optional.of(TestUtils.RECLAMATION_TO_CLOSE));
-        Reclamation reclamation = reclamationService.closeReclamation(TestUtils.RECLAMATION_ID_TO_CLOSE,"solution");
+        Reclamation reclamation = reclamationService.closeReclamation(TestUtils.RECLAMATION_ID_TO_CLOSE,new Solution("solution"));
 
         assertThat(reclamation.getSolution()).isEqualTo("solution");
     }

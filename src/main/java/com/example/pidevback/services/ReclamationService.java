@@ -1,6 +1,7 @@
 package com.example.pidevback.services;
 
 
+import com.example.pidevback.dto.Solution;
 import com.example.pidevback.entities.Reclamation;
 import com.example.pidevback.entities.Users;
 import com.example.pidevback.repositories.ReclamationRepository;
@@ -68,10 +69,10 @@ public class ReclamationService {
 
     }
 
-    public Reclamation closeReclamation(Long id, String solution) {
+    public Reclamation closeReclamation(Long id, Solution solution) {
         Reclamation rec = reclamationRepository.findById(id).orElseThrow(RuntimeException::new);
         rec.setTreated(true);
-        rec.setSolution(solution);
+        rec.setSolution(solution.getSolution());
         reclamationRepository.save(rec);
         return rec;
     }
