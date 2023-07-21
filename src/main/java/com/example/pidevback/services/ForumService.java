@@ -119,8 +119,8 @@ public class ForumService {
 
         for (BadWord badWord : l1) {
             log.info("wooooooooooooooooooooooooooord-------------------------->"+badWord);
-            if (ch.contains(badWord.getWord()) == true)
-                x = 1;
+           if (ch.contains(badWord.getWord()) == true)
+               x = 1;
         }
         return x;
 
