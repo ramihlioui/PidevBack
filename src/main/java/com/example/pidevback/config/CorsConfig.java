@@ -33,6 +33,7 @@ public class CorsConfig implements WebMvcConfigurer {
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        bean.setEnabled(false);
 
         return bean;
     }
