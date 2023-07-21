@@ -49,7 +49,7 @@ public class ReclamationService {
         Map<String, Long> stats = new HashMap<>();
         stats.put("Open", reclamationRepository.findAll().stream().filter(rec -> !rec.isTreated()).count());
         stats.put("Closed", reclamationRepository.findAll().stream().filter(Reclamation::isTreated).count());
-        stats.put("CreatedToday", reclamationRepository.findAll().stream().filter(rec -> rec.getCreationDate().equals(new Date())).count());
+        stats.put("CreatedToday", reclamationRepository.findAll().stream().filter(rec -> rec.getCreationDate().getDay()== new Date().getDay()).count());
         stats.put("Total", (long) reclamationRepository.findAll().size());
         return stats;
     }
