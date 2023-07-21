@@ -3,7 +3,6 @@ package com.example.pidevback.entities;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -70,6 +69,7 @@ public class Users implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole()))
                 .collect(Collectors.toList());
     }
+
     @Override
     public String getUsername() {
         return email;
