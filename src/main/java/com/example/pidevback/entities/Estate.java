@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import net.minidev.json.annotate.JsonIgnore;
 
 @Entity
 @Getter
@@ -34,18 +33,14 @@ public class Estate implements Serializable {
     private Long price;
 
     private String description;
-    @JsonIgnore
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Estate_Details details;
-    @JsonIgnore
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Location location;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     private Users owner;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "estate")
-    private List<Appointment> appointmentList;
 }
